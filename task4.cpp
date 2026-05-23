@@ -89,7 +89,25 @@ class Account {
             cout<<"\nAccount created successfully !!";
         }
 
+        bool login(int an, int PIN) {
+            Account a;
+
+            ifstream fin("accounts.dat", ios::binary);
+            while(fin.read((char*)&a, sizeof(a))) {
+                if(a.accNo==an && a.pin==PIN) {
+                    *this=a;
+                    fin.close();
+                    return true;
+                }
+            }
+            fin.close();
+            return false;
+        }
+
 };
+// void customerMenu(Account a) {
+
+// }
 int main() {
     int ch;
     do {
@@ -113,7 +131,25 @@ int main() {
             }
 
             case 3:
-            break;
+            {
+                int accNo, pin;
+                cout<<"\nEnter your account no : ";
+                cin>>accNo;
+
+                cout<<"\nEnter your 4 digit pin : ";
+                cin>>pin;
+
+                Account a;
+
+                if(a.login(accNo, pin)) {
+                    cout<<"\nSuccessfully logged in into your account";
+                    // customerMenu(a);
+
+                } else {
+                    cout<<"\nInvalid account no or pin !!";
+                }
+                break;
+            }
 
             case 4:
                 cout<<"\nThank you..!! Visit again";
