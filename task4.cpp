@@ -104,10 +104,51 @@ class Account {
             return false;
         }
 
-};
-// void customerMenu(Account a) {
+        void accountDetails() {
+            cout<<"\nAccount holder name : "<<cName;
+            cout<<"\nAccount number : "<<accNo;
+            cout<<"\nCustomer Id : "<<cId;
+            cout<<"\nBalance : "<<balance;
+            cout<<"\n4 digit PIN : "<<pin;
+        }
 
-// }
+};
+void customerMenu(Account a) {
+    int ch;
+    do {
+        cout<<"\n\n1. Account Details\n2. Deposit Money\n3. Withdraw Money\n4. Fund Transfer\n5. Check Balance\n6. Transaction History\n7. Logout";
+        cout<<"\nEnter your choice : ";
+        cin>>ch;
+        switch(ch) {
+            case 1:
+                a.accountDetails();
+            break;
+
+            case 2:
+            break;
+
+            case 3:
+            break;
+
+            case 4:
+            break;
+
+            case 5:
+            break;
+
+            case 6:
+            break;
+
+            case 7:
+                cout<<"\nLogout Successfully !!";
+            break;
+
+            default:
+                cout<<"Select valid choice...";
+
+        }
+    }while(ch!=7);
+}
 int main() {
     int ch;
     do {
@@ -143,7 +184,7 @@ int main() {
 
                 if(a.login(accNo, pin)) {
                     cout<<"\nSuccessfully logged in into your account";
-                    // customerMenu(a);
+                    customerMenu(a);
 
                 } else {
                     cout<<"\nInvalid account no or pin !!";
