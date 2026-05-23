@@ -6,7 +6,9 @@ using namespace std;
 class Customer {
     private:
         int cId;
-        char cName[50], cEmail[50], cMno[11];
+        char cName[50];
+        char cEmail[50];
+        char cMno[11];
     public:
         void createCustomer() {
             cout<<"\nEnter your name : ";
@@ -30,6 +32,63 @@ class Customer {
             cout<<"\nCustomer created successfully !!";
         }
 
+        bool customerExist(int ID) {
+            Customer c;
+            ifstream fin("customers.dat", ios::binary);
+            while(fin.read((char*)&c, sizeof(c))) {
+                if(c.cId==ID) {
+                    fin.close();
+                    return true;
+                }
+            }
+            fin.close();
+            return false;
+        }
+
+};
+
+class Account {
+    private:
+        int pin;
+        int accNo;
+        double balance;
+        int cId;
+        char cName[50];
+
+    public:
+        void createAccount() {
+            Customer c;
+
+            cout<<"\nEnter customer ID : ";
+            cin>>cId;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            if(!c.customerExist(cId)) {
+                cout<<"\nCustomer not exists";
+                return;
+            }
+
+            cout<<"\nEnter account holder name : ";
+            cin.getline(cName, 50);
+
+            cout<<"\nEnter your account number : ";
+            cin>>accNo;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout<<"\nEnter initial balance : ";
+            cin>>balance;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout<<"\nSet 4 digits pin : ";
+            cin>>pin;
+
+            ofstream fout("accounts.dat", ios::binary | ios::app);
+            fout.write((char*)this, sizeof(*this));
+            fout.close();
+
+            cout<<"\nAccount created successfully !!";
+        }
+
 };
 int main() {
     int ch;
@@ -45,8 +104,13 @@ int main() {
                 c.createCustomer();
                 break;
             }
+
             case 2:
-            break;
+            {
+                Account a;
+                a.createAccount();
+                break;
+            }
 
             case 3:
             break;
