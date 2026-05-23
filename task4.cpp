@@ -2,7 +2,48 @@
 #include <string>
 #include <limits>
 #include <fstream>
+#include <cstring>
+#include <ctime>
 using namespace std;
+
+class Transaction {
+    private:
+        char type[20];
+        double amt;
+        int accNo;
+        char dateTime[50];
+    public:
+        void setTransaction(const char t[], double amount, int an) {
+            accNo=an;
+            strcpy(type, t);
+            amt=amount;
+            time_t now = time(0);
+            strcpy(dateTime, ctime(&now));
+        }
+
+        void saveTransaction() {
+            ofstream fout("transactions.dat", ios::binary | ios::app);
+            fout.write((char*)this, sizeof(*this));
+            fout.close();
+        }
+
+        void showTransaction(int an) {
+            ifstream fin("transactions.dat", ios::binary);
+            Transaction t;
+
+            cout<<"\n---TRANSACTION HISTORY---\n";
+            while(fin.read((char*)&t, sizeof(t))) {
+                if(t.accNo==an) {
+                    cout<<"\nTransaction type : "<<t.type;
+                    cout<<"\nAmount : "<<t.amt;
+                    cout<<"\nDate & Time : "<<t.dateTime;
+                    cout<<"\n--------------------\n";
+                }
+            }
+            fin.close();
+        }
+
+};
 class Customer {
     private:
         int cId;
@@ -112,6 +153,46 @@ class Account {
             cout<<"\n4 digit PIN : "<<pin;
         }
 
+        void depositMoney(double amt) {
+            balance+=amt;
+
+            updateAccount();
+
+            Transaction t;
+            t.setTransaction("Deposit", amt, accNo);
+            t.saveTransaction();
+
+            cout<<"\nAmount deposited successfully\n";
+        }
+
+        void updateAccount() {
+            ifstream fin("accounts.dat", ios::binary);
+            ofstream fout("temp.dat", ios::binary);
+
+            Account a;
+            while(fin.read((char*)&a, sizeof(a))) {
+                if(a.accNo==accNo) {
+                    fout.write((char*)this, sizeof(*this));
+                } else {
+                    fout.write((char*)&a, sizeof(a));
+                }
+            }
+
+            fin.close();
+            fout.close();
+
+            remove("accounts.dat");
+            rename("temp.dat", "accounts.dat");
+        }
+
+        void checkBalance() {
+            cout<<"\nYour current balance : "<<balance;
+        }
+
+        int getAccNo() {
+            return accNo;
+        }
+
 };
 void customerMenu(Account a) {
     int ch;
@@ -125,6 +206,16 @@ void customerMenu(Account a) {
             break;
 
             case 2:
+            {
+                double amt;
+                cout<<"\nHow much amount you want to deposit : ";
+                cin>>amt;
+                if(amt<=0) {
+                    cout<<"\nAmount must be greter than 0 !!";
+                } else {
+                    a.depositMoney(amt);
+                }
+            }
             break;
 
             case 3:
@@ -134,10 +225,15 @@ void customerMenu(Account a) {
             break;
 
             case 5:
+                a.checkBalance();
             break;
 
             case 6:
-            break;
+            {   
+                Transaction t;
+                t.showTransaction(a.getAccNo());
+                break;
+            }
 
             case 7:
                 cout<<"\nLogout Successfully !!";
