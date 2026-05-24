@@ -193,6 +193,22 @@ class Account {
             return accNo;
         }
 
+        void withdrawMoney(double amt) {
+
+            if(amt>balance) {
+                cout<<"\nInsufficient balance..!!";
+                return;
+            }
+            balance-=amt;
+            updateAccount();
+
+            Transaction t;
+            t.setTransaction("Withdraw", amt, accNo);
+            t.saveTransaction();
+
+            cout<<"\nAmount withdrawn successfully..!!";
+        }
+
 };
 void customerMenu(Account a) {
     int ch;
@@ -219,7 +235,17 @@ void customerMenu(Account a) {
             break;
 
             case 3:
-            break;
+            {
+                double amt;
+                cout<<"\nHow much amount you want to withdraw : ";
+                cin>>amt;
+                if(amt<=0) {
+                    cout<<"\nAmount must be greter than 0 !!";
+                } else {
+                    a.withdrawMoney(amt);
+                }
+                break;
+            }
 
             case 4:
             break;
