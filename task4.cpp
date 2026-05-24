@@ -60,7 +60,7 @@ class Customer {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(customerExist(cId)) {
-                cout<<"\nThis customer ID already exist...";
+                cout<<"\n[ERROR] Customer ID already exists.";
                 return;
             }
             cout<<"\nEnter your Email ID : ";
@@ -73,7 +73,7 @@ class Customer {
             fout.write((char*)this, sizeof(*this));
             fout.close();
 
-            cout<<"\nCustomer created successfully !!";
+            cout<<"\n[SUCCESS] Customer created successfully.";
             
         }
 
@@ -109,7 +109,7 @@ class Account {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(!c.customerExist(cId)) {
-                cout<<"\nCustomer not exists";
+                cout<<"\n[ERROR] Customer ID not found.";
                 return;
             }
 
@@ -121,7 +121,7 @@ class Account {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(accountExist(accNo)) {
-                cout<<"\nThis account number already exist...";
+                cout<<"\n[ERROR] Account number already exists.";
                 return;
             }
 
@@ -130,7 +130,7 @@ class Account {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(balance<0) {
-                cout<<"Balance cannot be negative..";
+                cout<<"\n[ERROR] Balance cannot be negative.";
                 return;
             }
 
@@ -138,7 +138,7 @@ class Account {
             cin>>pin;
 
             if(pin<1000 || pin>9999) {
-                cout<<"\nPin must be exactly 4 digit..!!";
+                cout<<"\n[ERROR] PIN must contain exactly 4 digits.";
                 return;
             }
 
@@ -146,7 +146,7 @@ class Account {
             fout.write((char*)this, sizeof(*this));
             fout.close();
 
-            cout<<"\nAccount created successfully !!";
+            cout<<"\n[SUCCESS] Account created successfully.";
         }
 
         bool accountExist(int no) {
@@ -193,7 +193,7 @@ class Account {
             t.setTransaction("Deposit", amt, accNo);
             t.saveTransaction();
 
-            cout<<"\nAmount deposited successfully\n";
+            cout<<"\n[SUCCESS] Amount deposited successfully.";
         }
 
         void updateAccount() {
@@ -227,7 +227,7 @@ class Account {
         void withdrawMoney(double amt) {
 
             if(amt>balance) {
-                cout<<"\nInsufficient balance..!!";
+                cout<<"\n[ERROR] Insufficient balance.";
                 return;
             }
             balance-=amt;
@@ -237,7 +237,7 @@ class Account {
             t.setTransaction("Withdraw", amt, accNo);
             t.saveTransaction();
 
-            cout<<"\nAmount withdrawn successfully..!!";
+            cout<<"\n[SUCCESS] Amount withdrawn successfully.";
         }
         
         void transferMoney() {
@@ -246,7 +246,7 @@ class Account {
             cin>>recAcc;
 
             if(recAcc==accNo) {
-                cout<<"\nYou cannot transfer to same account";
+                cout<<"\n[ERROR] Cannot transfer money to the same account.";
                 return;
             }
 
@@ -255,11 +255,11 @@ class Account {
             cin>>amt;
 
             if(amt<=0) {
-                cout<<"\nAmount must be greter than 0 !!";
+                cout<<"\n[ERROR] Amount must be greater than 0.";
                 return;
             } 
             if(amt>balance) {
-                cout<<"\nInsufficient balance..!!";
+                cout<<"\n[ERROR] Insufficient balance.";
                 return;
             }
 
@@ -285,7 +285,7 @@ class Account {
 
             if(!find) {
                 remove("temp.dat");
-                cout<<"\nReceiver account not found !!";
+                cout<<"\n[ERROR] Receiver account not found.";
                 return;
             }
 
@@ -300,7 +300,7 @@ class Account {
             t2.setTransaction("Transfer received", amt, recAcc);
             t2.saveTransaction();
             
-            cout<<"\nMoney transferred Successfully..!!";
+            cout<<"\n[SUCCESS] Money transferred successfully.";
             cout<<"\nCurrent balance : "<<balance;
         }
 
@@ -322,7 +322,7 @@ void customerMenu(Account &a) {
                 cout<<"\nHow much amount you want to deposit : ";
                 cin>>amt;
                 if(amt<=0) {
-                    cout<<"\nAmount must be greter than 0 !!";
+                    cout<<"\n[ERROR] Amount must be greater than 0.";
                 } else {
                     a.depositMoney(amt);
                 }
@@ -335,7 +335,7 @@ void customerMenu(Account &a) {
                 cout<<"\nHow much amount you want to withdraw : ";
                 cin>>amt;
                 if(amt<=0) {
-                    cout<<"\nAmount must be greter than 0 !!";
+                    cout<<"\n[ERROR] Amount must be greater than 0.";
                 } else {
                     a.withdrawMoney(amt);
                 }
@@ -360,7 +360,7 @@ void customerMenu(Account &a) {
             }
 
             case 7:
-                cout<<"\nLogout Successfully !!";
+                cout<<"\n[INFO] Logged out successfully.";
             break;
 
             default:
@@ -403,17 +403,17 @@ int main() {
                 Account a;
 
                 if(a.login(accNo, pin)) {
-                    cout<<"\nSuccessfully logged in into your account";
+                    cout<<"\n[SUCCESS] Login successful.";
                     customerMenu(a);
 
                 } else {
-                    cout<<"\nInvalid account no or pin !!";
+                    cout<<"\n[ERROR] Invalid account number or PIN.";
                 }
                 break;
             }
 
             case 4:
-                cout<<"\nThank you..!! Visit again";
+                cout<<"\n[INFO] Thank you for using the Banking System.";
             break;
 
             default:
